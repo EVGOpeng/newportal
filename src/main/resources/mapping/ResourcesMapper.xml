@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.calabar.portal.dao.ResourcesMapper" >
+  <resultMap id="resourcessMap" type="com.calabar.portal.bean.Resources">
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="siteid" property="siteId" jdbcType="BIGINT" />
+    <result column="parentId" property="parentId" jdbcType="BIGINT" />
+    <result column="menuSczyId" property="menuSczyId" jdbcType="BIGINT" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="SMALLINT" />
+    <result column="resType" property="resType" jdbcType="SMALLINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="action" property="action" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="baseColumn">
+  ID,
+  NAME
+  ,SITEID
+  ,PARENTID
+  ,MENUSCZYID
+  ,URL
+  ,SORT
+  ,RESTYPE
+  ,STATUS
+  ,typeName
+  ,action
+  </sql>
+  <insert id="insert" parameterType="com.calabar.portal.bean.Resources">
+  insert into CALABAR_RESOURCES_N (
+   NAME
+  ,SITEID
+  ,PARENTID
+  ,MENUSCZYID
+  ,URL
+  ,SORT
+  ,RESTYPE
+  ,STATUS
+  ,typeName
+  ,action
+) VALUES (
+   #{name,jdbcType=VARCHAR}
+  ,#{siteId,jdbcType=BIGINT}
+  ,#{parentId,jdbcType=BIGINT}
+  ,#{menuSczyId,jdbcType=BIGINT}
+  ,#{url,jdbcType=VARCHAR}
+  ,#{sort,jdbcType=SMALLINT}
+  ,#{resType,jdbcType=SMALLINT}
+  ,#{status,jdbcType=SMALLINT}
+  ,#{typeName,jdbcType=VARCHAR}
+  ,#{action,jdbcType=VARCHAR}
+)
+  </insert>
+  <update id="update" parameterType="com.calabar.portal.bean.Resources" >
+    update CALABAR_RESOURCES_N SET
+     NAME=#{name,jdbcType=VARCHAR}
+  ,SITEID=#{siteId,jdbcType=BIGINT}
+  ,PARENTID=#{parentId,jdbcType=BIGINT}
+  ,MENUSCZYID=#{menuSczyId,jdbcType=BIGINT}
+  ,URL=#{url,jdbcType=VARCHAR}
+  ,typeName=#{typeName,jdbcType=VARCHAR}
+  ,action=#{action,jdbcType=VARCHAR}
+  ,SORT=#{sort,jdbcType=SMALLINT}
+  ,RESTYPE=#{resType,jdbcType=SMALLINT}
+  ,STATUS=#{status,jdbcType=SMALLINT}
+  where id=#{id,jdbcType=BIGINT}
+  </update>
+  <select id="sellectByParentId" parameterType="java.lang.Long" resultMap="resourcessMap">
+    select <include refid="baseColumn"/> from CALABAR_RESOURCES_N
+    where PARENTID=#{parentId,jdbcType=BIGINT} order by sort asc
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="resourcessMap">
+    select <include refid="baseColumn"/> from CALABAR_RESOURCES_N
+    where ID=#{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByRoleIds" resultMap="resourcessMap" parameterType="java.util.List">
+    select distinct
+    re.ID , re.NAME , re.SITEID , re.PARENTID ,res.action,
+    re.MENUSCZYID , re.URL , re.SORT ,re.typeName, re.RESTYPE , re.STATUS  from CALABAR_ROLE_N ro
+    left join CALABAR_ROLE_RES_N rer on ro.ID = rer.ROLEID left join CALABAR_RESOURCES_N re on rer.RESID=re.ID
+    where ro.id in
+    <foreach item="role" index="index" collection="list" open="(" separator="," close=")">
+      #{role.id,jdbcType=BIGINT}
+    </foreach>
+    and re.STATUS=1
+    order by re.sort asc,re.SITEID asc
+  </select>
+  <select id="selectSubmenuByParentId" parameterType="com.calabar.portal.bean.Resources" resultMap="resourcessMap">
+    select <include refid="baseColumn"/> from CALABAR_RESOURCES_N
+    where PARENTID in (select id from CALABAR_RESOURCES_N where PARENTID= #{id}) or PARENTID in(#{id})
+<if test="resType!=null">
+    and RESTYPE=#{resType}
+</if>
+order by PARENTID asc,SORT asc
+  </select>
+  <select id="selectAll" parameterType="java.util.Map" resultMap="resourcessMap">
+    select <include refid="baseColumn"/> from CALABAR_RESOURCES_N
+    <where>
+      <if test="name!=null">
+        NAME like '%'concat(#{name})contat('%')
+      </if>
+      <if test="resType">
+       and RESTYPE = #{resType}
+      </if>
+      <if test="status">
+       and STATUS = #{status}
+      </if>
+      <if test="stiteId">
+       and stiteId = #{stiteId}
+      </if>
+    </where>
+    order by sort asc
+  </select>
+</mapper>

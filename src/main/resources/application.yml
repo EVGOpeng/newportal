@@ -1,0 +1,56 @@
+
+logging:
+  level:
+    root: info
+  file:
+    path: calabarlogs
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url:  jdbc:db2://10.165.4.15:50000/CYZYDB:allowMultiQueries=true;
+    password: calabar@16!
+    username: portals
+    driver-class-name: com.ibm.db2.jcc.DB2Driver
+    platform: db2
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,slf4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  thymeleaf:
+    prefix: classpath:/templates/html/
+    cache: false
+#引入额外配置文件
+  profiles:
+    active: portalConfig
+  #文件上传
+  servlet:
+    multipart:
+      enabled: true
+      #单个文件大小
+      max-file-size: 512MB
+      #总文件大小
+      max-request-size: 1024MB
+##pagehelper分页插件
+pagehelper:
+    helperDialect: DB2
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+    returnPageInfo: check
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.calabar.potral.bean
+server:
+  servlet:
+    context-path: /sczy
+  port: 8080

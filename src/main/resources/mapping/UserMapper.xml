@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.calabar.portal.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.calabar.portal.bean.User" >
+    <id column="uid"  property="id" jdbcType="BIGINT"/>
+    <result column="ucode"  property="code" jdbcType="VARCHAR"/>
+    <result column="uname"  property="name" jdbcType="VARCHAR"/>
+    <result column="usex"  property="sex" jdbcType="VARCHAR"/>
+    <result column="udepartId"  property="departId" jdbcType="BIGINT"/>
+    <result column="ucategory"  property="category" jdbcType="VARCHAR"/>
+    <result column="ucompanyid"  property="companyid" jdbcType="BIGINT"/>
+    <result column="uworksection"  property="worksection" jdbcType="VARCHAR"/>
+    <result column="uworkcompany"  property="workcompany" jdbcType="VARCHAR"/>
+    <result column="useqencing"  property="seqencing" jdbcType="BIGINT"/>
+    <result column="ustatus"  property="status" jdbcType="BIGINT"/>
+    <result column="ucreator"  property="creator" jdbcType="VARCHAR"/>
+    <result column="ulastEditDate"  property="lastEditDate" jdbcType="TIMESTAMP"/>
+    <result column="uofficePhone"  property="officePhone" jdbcType="VARCHAR"/>
+    <result column="utelPhone"  property="telPhone" jdbcType="VARCHAR"/>
+    <result column="uaccount"  property="account" jdbcType="VARCHAR"/>
+    <result column="ujob"  property="job" jdbcType="VARCHAR"/>
+    <result column="uaddress"  property="address" jdbcType="VARCHAR"/>
+    <result column="ufax"  property="fax" jdbcType="VARCHAR"/>
+    <result column="uhomeNumber"  property="homeNumber" jdbcType="VARCHAR"/>
+    <result column="uimgurl"  property="imgurl" jdbcType="VARCHAR"/>
+    <result column="uemail"  property="email" jdbcType="VARCHAR"/>
+    <result column="uwechat"  property="wechat" jdbcType="VARCHAR"/>
+    <result column="uqq"  property="qq" jdbcType="VARCHAR"/>
+    <result column="umid"  property="mid" jdbcType="VARCHAR"/>
+    <collection property="list" ofType="com.calabar.portal.bean.Role">
+      <id column="rnID" property="id" jdbcType="BIGINT" />
+      <result column="rnname" property="name" jdbcType="VARCHAR" />
+      <result column="rnsiteid" property="siteId" jdbcType="BIGINT" />
+      <result column="rnstatus" property="status" jdbcType="SMALLINT" />
+    </collection>
+    <collection property="roles" ofType="com.calabar.portal.bean.OldRole">
+      <id column="rroleId" property="roleId" jdbcType="BIGINT" />
+      <result column="rcompanyId" property="companyId" jdbcType="BIGINT" />
+      <result column="rclassnameId" property="classnameId" jdbcType="BIGINT" />
+      <result column="rclasspk" property="classpk" jdbcType="BIGINT" />
+      <result column="rname" property="name" jdbcType="VARCHAR" />
+      <result column="rtitle" property="title" jdbcType="VARCHAR" />
+      <result column="rdescription" property="description" jdbcType="VARCHAR" />
+      <result column="rtype_" property="type" jdbcType="INTEGER" />
+      <result column="rsubType" property="subType" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+    <resultMap id="BaseMap" type="com.calabar.portal.bean.User" >
+        <id column="id"  property="id" jdbcType="BIGINT"/>
+        <result column="code"  property="code" jdbcType="VARCHAR"/>
+        <result column="name"  property="name" jdbcType="VARCHAR"/>
+        <result column="sex"  property="sex" jdbcType="VARCHAR"/>
+        <result column="departId"  property="departId" jdbcType="BIGINT"/>
+        <result column="category"  property="category" jdbcType="VARCHAR"/>
+        <result column="companyid"  property="companyid" jdbcType="BIGINT"/>
+        <result column="worksection"  property="worksection" jdbcType="VARCHAR"/>
+        <result column="workcompany"  property="workcompany" jdbcType="VARCHAR"/>
+        <result column="seqencing"  property="seqencing" jdbcType="BIGINT"/>
+        <result column="status"  property="status" jdbcType="BIGINT"/>
+        <result column="creator"  property="creator" jdbcType="VARCHAR"/>
+        <result column="lastEditDate"  property="lastEditDate" jdbcType="TIMESTAMP"/>
+        <result column="officePhone"  property="officePhone" jdbcType="VARCHAR"/>
+        <result column="telPhone"  property="telPhone" jdbcType="VARCHAR"/>
+        <result column="account"  property="account" jdbcType="VARCHAR"/>
+        <result column="job"  property="job" jdbcType="VARCHAR"/>
+        <result column="address"  property="address" jdbcType="VARCHAR"/>
+        <result column="fax"  property="fax" jdbcType="VARCHAR"/>
+        <result column="homeNumber"  property="homeNumber" jdbcType="VARCHAR"/>
+        <result column="imgurl"  property="imgurl" jdbcType="VARCHAR"/>
+        <result column="email"  property="email" jdbcType="VARCHAR"/>
+        <result column="wechat"  property="wechat" jdbcType="VARCHAR"/>
+        <result column="qq"  property="qq" jdbcType="VARCHAR"/>
+        <result column="mid"  property="mid" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="basColumn">
+        ID, CODE, NAME, SEX, DEPARTID, CATEGORY, COMPANYID,
+         WORKSECTION, WORKCOMPANY, SEQENCING, STATUS,
+         CREATOR, LASTEDITDATE, OFFICEPHONE, TELPHONE,
+          ACCOUNT, JOB, FAX, ADDRESS, HOMENUMBER,
+          IMGURL, ROOM, EMAIL, WECHAT, QQ, MID
+    </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+ select u.ID uid, u.CODE ucode, u.NAME uname, u.SEX usex, u.DEPARTID uDEPARTID,
+ u.CATEGORY  uCATEGORY, u.COMPANYID uCOMPANYID, u.WORKSECTION uWORKSECTION,
+ u.WORKCOMPANY uWORKCOMPANY, u.SEQENCING uSEQENCING, u.STATUS uSTATUS,
+ u.CREATOR uCREATOR, u.LASTEDITDATE uLASTEDITDATE, u.OFFICEPHONE uOFFICEPHONE,
+ u.TELPHONE uTELPHONE, u.ACCOUNT uACCOUNT, u.JOB uJOB, u.FAX uFAX,
+ u.ADDRESS uADDRESS, u.HOMENUMBER uHOMENUMBER, u.IMGURL uIMGURL, u.ROOM uROOM,
+ u.EMAIL uEMAIL, u.WECHAT uWECHAT, u.QQ uQQ, u.MID uMID,
+r.ROLEID rROLEID, r.COMPANYID rCOMPANYID, r.CLASSNAMEID rCLASSNAMEID,
+r.CLASSPK rCLASSPK, r.NAME rNAME, r.TITLE rTITLE, r.DESCRIPTION rDESCRIPTION,
+ r.TYPE_ rTYPE_, r.SUBTYPE rSUBTYPE,
+rn.ID rnID, rn.NAME  rnNAME, rn.SITEID rnSITEID, rn.STATUS rnSTATUS
+from CALABAR_USER u left join USERS_ROLES ur on u.ID=ur.USERID left join ROLE_ r on ur.ROLEID=r.ROLEID
+left join CALABAR_USER_ROLE_N urn on u.ID=urn.USERID left join CALABAR_ROLE_N rn on urn.ROLEID=rn.ID
+where
+u.id= #{id,jdbcType=BIGINT}
+  </select>
+<select id="selectAll" parameterType="java.util.Map" resultMap="BaseMap">
+select <include refid="basColumn"/> from CALABAR_USER
+    <where>
+        <if test="name!=null">
+        NAME like '%'concat(#{name})contat('%')
+        </if>
+    </where>
+</select>
+  <delete id="deleteUserRole">
+    delete from CALABAR_USER_ROLE_N where USERID in
+    <foreach collection="userIds" item="userId" index="index"  open="(" separator="," close=")">
+       #{userId}
+    </foreach>
+  </delete>
+  <insert id="updateUserRole" parameterType="java.util.Map">
+      insert into CALABAR_USER_ROLE_N (
+      USERID
+      ,ROLEID
+      ) VALUES
+      <foreach collection="userIds" item="userId"  separator=",">
+        <foreach collection="roleIds" item="roleId"  separator=",">
+      (
+      #{userId},
+      #{roleId}
+      )
+    </foreach>
+  </foreach>
+  </insert>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.calabar.portal.dao.MenuMapper" >
+  <resultMap id="menuMap" type="com.calabar.portal.bean.Menu">
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="menuName" property="menuName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="siteId" property="siteId" jdbcType="BIGINT" />
+    <result column="menuUrl" property="menuUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="baseColumn">
+ ID, MENUNAME, SITEID, STATUS, SORT, MENUURL
+  </sql>
+  <sql id="insertColumn">
+  MENUNAME
+  ,SITEID
+  ,STATUS
+  ,SORT
+  ,MENUURL
+  </sql>
+  <insert id="insert" parameterType="com.calabar.portal.bean.Menu">
+insert into CALABAR_MENU_N (
+   <include refid="insertColumn"/>
+) VALUES (
+    #{menuName,jdbcType=VARCHAR}
+  ,#{siteId,jdbcType=BIGINT}
+  ,#{status,jdbcType=SMALLINT}
+  ,#{sort,jdbcType=INTEGER}
+  ,#{menuUrl,jdbcType=VARCHAR}
+)
+  </insert>
+  <update id="update" parameterType="com.calabar.portal.bean.Menu" >
+    update CALABAR_MENU_N SET
+   MENUNAME =  #{menuName,jdbcType=VARCHAR}
+  ,SITEID = #{siteId,jdbcType=BIGINT}
+  ,STATUS = #{status,jdbcType=SMALLINT}
+  ,SORT = #{sort,jdbcType=INTEGER}
+  ,MENUURL = #{menuUrl,jdbcType=VARCHAR}
+  where ID=#{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="menuMap">
+    select <include refid="baseColumn"/> from CALABAR_MENU_N
+    where ID=#{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" parameterType="java.util.Map" resultMap="menuMap">
+    select <include refid="baseColumn"/> from CALABAR_MENU_N
+    <where>
+      <if test="menuName!=null">
+        menuName like '%'concat(#{menuName})concat('%')
+      </if>
+      <if test="siteId!=null">
+      and  SITEID = #{siteId,jdbcType=BIGINT}
+      </if>
+      <if test="status!=null">
+      and  STATUS = #{status,jdbcType=SMALLINT}
+      </if>
+    </where>
+      order by SORT asc
+  </select>
+</mapper>

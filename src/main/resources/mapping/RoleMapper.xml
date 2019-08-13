@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.calabar.portal.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.calabar.portal.bean.Role" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="siteid" property="siteId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <collection property="resourcess" ofType="com.calabar.portal.bean.Resources">
+      <id column="reID" property="id" jdbcType="BIGINT" />
+      <result column="rename" property="name" jdbcType="VARCHAR" />
+      <result column="reaction" property="action" jdbcType="VARCHAR" />
+      <result column="resiteid" property="siteId" jdbcType="BIGINT" />
+      <result column="reparentId" property="parentId" jdbcType="BIGINT" />
+      <result column="remenuSczyId" property="menuSczyId" jdbcType="BIGINT" />
+      <result column="restatus" property="status" jdbcType="SMALLINT" />
+      <result column="reurl" property="url" jdbcType="VARCHAR" />
+      <result column="resort" property="sort" jdbcType="SMALLINT" />
+      <result column="reresType" property="resType" jdbcType="SMALLINT" />
+    </collection>
+  </resultMap>
+  <resultMap id="BaseMap" type="com.calabar.portal.bean.Role" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="siteid" property="siteId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="baseColum">ID, NAME, SITEID, STATUS</sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  select ro.ID, ro.NAME, ro.SITEID, ro.STATUS,
+re.ID reID, re.NAME reNAME, re.SITEID reSITEID, re.PARENTID rePARENTID,re.action reaction,
+re.MENUSCZYID reMENUSCZYID, re.URL reURL, re.SORT reSORT, re.RESTYPE reRESTYPE, re.STATUS reSTATUS from CALABAR_ROLE_N ro
+left join CALABAR_ROLE_RES_N rer on ro.ID = rer.ROLEID left join CALABAR_RESOURCES_N re on rer.RESID=re.ID
+where
+ro.id= #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseMap" parameterType="com.calabar.portal.bean.Role">
+    select <include refid="baseColum"/>
+    from CALABAR_ROLE_N
+    <where>
+      <if test="siteId !=null">
+        and siteid= #{siteId,jdbcType=BIGINT}
+      </if>
+      <if test="status !=null">
+        and status= #{status,jdbcType=SMALLINT}
+      </if>
+    </where>
+  </select>
+  <select id="sellectByUserId" resultMap="BaseMap" parameterType="java.lang.Long">
+    select r.ID, r.NAME, r.SITEID, r.STATUS
+    from CALABAR_USER_ROLE_N u inner join CALABAR_ROLE_N r on r.ID=u.ROLEID     where u.USERID=#{id}
+  </select>
+  <select id="selectByIds" resultMap="BaseResultMap" parameterType="java.util.List">
+  select ro.ID, ro.NAME, ro.SITEID, ro.STATUS,
+re.ID reID, re.NAME reNAME, re.SITEID reSITEID, re.PARENTID rePARENTID,re.action reaction,
+re.MENUSCZYID reMENUSCZYID, re.URL reURL, re.SORT reSORT, re.RESTYPE reRESTYPE, re.STATUS reSTATUS from CALABAR_ROLE_N ro
+left join CALABAR_ROLE_RES_N rer on ro.ID = rer.ROLEID left join CALABAR_RESOURCES_N re on rer.RESID=re.ID
+where ro.id in
+   <foreach item="role" index="index" collection="list" open="(" separator="," close=")">
+     #{role.id,jdbcType=BIGINT}
+   </foreach>
+    order by ro.name asc,re.Sort asc
+  </select>
+  <insert id="insert" parameterType="com.calabar.portal.bean.Role">
+insert into CALABAR_ROLE_N (
+   NAME
+  ,SITEID
+  ,STATUS
+) VALUES (
+   #{name}
+  ,#{siteId}
+  ,#{status}
+)
+  </insert>
+  <insert id="insertRoleResources" parameterType="java.util.List">
+      insert into CALABAR_ROLE_RES_N (
+      ROLEID
+      ,RESID
+      ) VALUES
+    <foreach  collection="resIds" item="resId" index="index"  separator=","  >
+      (#{roleId},#{resId})
+    </foreach>
+  </insert>
+  <delete id="deleteRoleResources" parameterType="java.lang.Long">
+    delete from CALABAR_ROLE_RES_N where ROLEID=#{roleId}
+  </delete>
+</mapper>

@@ -1,0 +1,26 @@
+#超级管理员id
+administratorRoleId: 1
+#File
+calabar:
+ file:
+    d:
+    #显示路径
+      getIp: http://10.165.1.227:8088/file/upload/
+     #文件上传路径
+      upLoadIp: smb://administrator:1qaz!QAZ@10.165.1.227/upload/
+      #暂时未使用
+      pathFile: smb://administrator:1qaz!QAZ@10.165.1.227:8080/upload/
+      #暂时未使用
+      view: http://10.165.1.227:8088/file/upload/
+    e:
+    #暂时未使用
+      savesky: smb://administrator:1qaz!QAZ@10.165.1.227/file/
+     #暂时未使用
+      getsky: file://10.165.1.227/file/
+#单点登录url和本机url
+portal:
+ CASurl: http://10.165.4.38:8899/cas/
+ localIp: http://10.165.110.17
+ #上传文件格式白名单，英文逗号隔开，不区分大小写
+file:
+ whitelist: BMP,JPG,JPEG,PNG,GIF,rar,zip,jar,doc,docx,ppt,xls,xlsx,wps,txt,AVI,mov,rmvb,rm,FLV,mp4,3GP,swf,mp3,WAV

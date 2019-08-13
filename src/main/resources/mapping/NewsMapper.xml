@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.calabar.portal.dao.NewsMapper" >
+  <resultMap id="newsResultMap" type="com.calabar.portal.bean.News" >
+    <id column="NEWID" property="newid" jdbcType="BIGINT" />
+    <result column="UUID" property="uuid" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="CLOB" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="PIC" property="pic" jdbcType="VARCHAR" />
+    <result column="SMPIC" property="smpic" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="SMCONTENT" property="smcontent" jdbcType="VARCHAR" />
+    <result column="ISHEADLINES" property="isheadlines" jdbcType="INTEGER" />
+    <result column="USERID" property="userid" jdbcType="BIGINT" />
+    <result column="USERNAME" property="userName" jdbcType="TINYINT" />
+    <result column="ISPUBLISH" property="isPush" jdbcType="INTEGER" />
+    <result column="ISPUBLISH" property="ispublish" jdbcType="INTEGER" />
+    <result column="PUBLISHTIME" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="LASTUPDATETIME" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+    <result column="VIEWS" property="views" jdbcType="INTEGER" />
+    <result column="SORT" property="sort" jdbcType="VARCHAR" />
+    <result column="KEYWORDS" property="keyWords" jdbcType="VARCHAR" />
+    <result column="SUBTITLE" property="subTitle" jdbcType="VARCHAR" />
+    <result column="STYLEID" property="styleId" jdbcType="INTEGER" />
+    <result column="SITEID" property="siteId" jdbcType="BIGINT" />
+    <result column="NEWSPAPERS" property="newspapers" jdbcType="INTEGER" />
+    <result column="RESID" property="resId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+ UUID, NEWID, TITLE, CONTENT, CREATETIME, PIC,
+ SMPIC, TYPE, SMCONTENT, ISHEADLINES, USERID,
+ USERNAME, ISPUBLISH, PUBLISHTIME,
+ LASTUPDATETIME, NEWSPAPERS, SOURCE,
+VIEWS, SITEID, SORT, KEYWORDS, SUBTITLE,
+ ISPUSH, STYLEID,RESID
+  </sql>
+  <select id="selectAll" resultMap="newsResultMap" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from CALABAR_NEWS
+    <where>
+      <if test="title != null">TITLE like '%'concat(#{title,jdbcType=VARCHAR})concat('%')</if>
+      <if test="minTime != null">AND PUBLISHTIME &gt;= #{minTime,jdbcType=TIMESTAMP}</if>
+      <if test="maxTime != null">AND PUBLISHTIME &lt;= #{maxTime,jdbcType=TIMESTAMP}</if>
+      <if test="siteId != null">AND SITEID = #{siteId,jdbcType=BIGINT}</if>
+      <if test="type != null">AND TYPE = #{siteId,jdbcType=INTEGER}</if>
+      <if test="resId != null">AND TYPE = #{resId,jdbcType=BIGINT}</if>
+      <if test="ispublish != null">AND ISPUBLISH = #{ispublish,jdbcType=INTEGER}</if>
+      <if test="isheadlines != null">AND ISHEADLINES = #{isheadlines,jdbcType=INTEGER}</if>
+    </where>
+      order by
+      <if test="orderColum != null"> ${orderColum}</if>
+      <if test="orderColum == null"> NEWID </if>
+      <if test="orderAD != null"> ${orderAD} </if>
+      <if test="orderAD == null"> DESC </if>
+  </select>
+  <select id="selectById" resultMap="newsResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List" />
+    from CALABAR_NEWS where NEWID= #{id}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Long">
+   delete from CALABAR_NEWS where NEWID= #{newid}
+  </delete>
+</mapper>
